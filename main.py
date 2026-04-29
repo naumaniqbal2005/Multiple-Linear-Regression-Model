@@ -19,11 +19,9 @@ def backward_elimination_ssr(X, y, alpha=0.05):
     df_numerator = 1  # df for one variable being removed
     df_denominator = len(y) - X.shape[1]  # residual df
     f_critical = f.ppf(1 - alpha, df_numerator, df_denominator)
-    
-    print(f"F-critical value: {f_critical:.4f} (α={alpha})")
+
     print("Full model equation:")
     print_equation(full_model.params, remaining_cols)
-    print()
 
     num_vars = X.shape[1]
     for i in range(num_vars):
@@ -49,10 +47,8 @@ def backward_elimination_ssr(X, y, alpha=0.05):
         
         # Remove variable if F-statistic is below critical value
         if min_f_stat < f_critical:
-            removed_var = remaining_cols[min_f_index]
             remaining_cols.pop(min_f_index)
             X = np.delete(X, min_f_index, axis=1)
-            print(f"Removed variable x{removed_var}, F-stat: {min_f_stat:.4f}")
         else:
             break
 
@@ -74,5 +70,4 @@ def print_equation(params, col_indices):
             equation += f" + {params[i]:.4f}x{original_col}"
     print(equation)
 
-print("Using SSR method for backward elimination:")
 X_optimized = backward_elimination_ssr(X, y)
