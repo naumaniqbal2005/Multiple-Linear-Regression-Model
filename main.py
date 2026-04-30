@@ -36,10 +36,10 @@ def backward_elimination_ssr(X, y, alpha=0.05):
             X_temp = np.delete(X, j, axis=1)
             reduced_model = sm.OLS(y, X_temp).fit()
             
-            # Calculate F-statistic using SSR difference
-            # F = (SSR_reduced - SSR_full) / MSE_full
-            ssr_diff = reduced_model.ssr - current_model.ssr
-            f_stat = ssr_diff / current_model.mse_resid
+            # Calculate F-statistic using ESS (Explained Sum of Squares / SSR)
+            # F = (SSR_full - SSR_reduced) / MSE_full
+            ess_diff = current_model.ess - reduced_model.ess
+            f_stat = ess_diff / current_model.mse_resid
             
             if f_stat < min_f_stat:
                 min_f_stat = f_stat
